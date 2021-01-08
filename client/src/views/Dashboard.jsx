@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export default class Dashboard extends Component {
 
@@ -19,20 +19,23 @@ export default class Dashboard extends Component {
         })
     }
     
-    handleDelete() {
-        const burgerId = this.props.match.params.id;
-
-        componentDidMount() {
+    
+       // DELETE PROJECT:
+    deleteBurger = (id) => {
         axios
-        .delete("http://localhost:4000/api/burgers/" + burgerId)
-        .then((apiResponse) => {
-            console.log("DELETE",apiResponse);
+        .delete(`http://localhost:4000/api/burgers/` + id) //http://localhost:4000/api/burgers/{some-id}
+        .then( () =>{ 
             this.setState({
-                burgers : apiResponse.data
+                burgers: this.state.burgers.filter((burger) => {
+                    return burger._id !== id
+                })
             })
+        }   
+        )
+        .catch((err)=>{
+            console.log(err)
         })
     }
-}
 
     render() {
         return (
@@ -45,7 +48,7 @@ export default class Dashboard extends Component {
                         <p>PRice :{burger.price}</p>
                         <p>{burger.image}</p>
                     <NavLink exact to={`/burgers/${burger._id}`}>See Details</NavLink>
-                    <button onClick={this.handleDelete()}>Delete PLEASE</button>
+                    <button onClick={() => this.deleteBurger(burger._id)}>Delete PLEASE</button>
 
                     </div>
                 )}
