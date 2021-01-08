@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios'
+import axios from 'axios';
+import { NavLink} from 'react-router-dom';
 
 export default class Dashboard extends Component {
 
@@ -17,6 +18,21 @@ export default class Dashboard extends Component {
             })
         })
     }
+    
+    handleDelete() {
+        const burgerId = this.props.match.params.id;
+
+        componentDidMount() {
+        axios
+        .delete("http://localhost:4000/api/burgers/" + burgerId)
+        .then((apiResponse) => {
+            console.log("DELETE",apiResponse);
+            this.setState({
+                burgers : apiResponse.data
+            })
+        })
+    }
+}
 
     render() {
         return (
@@ -26,8 +42,11 @@ export default class Dashboard extends Component {
                 return (
                     <div key={burger._id}>
                         <p>{burger.name}</p>
-                        <p>{burger.price}</p>
+                        <p>PRice :{burger.price}</p>
                         <p>{burger.image}</p>
+                    <NavLink exact to={`/burgers/${burger._id}`}>See Details</NavLink>
+                    <button onClick={this.handleDelete()}>Delete PLEASE</button>
+
                     </div>
                 )}
             )}
@@ -36,3 +55,5 @@ export default class Dashboard extends Component {
         )
     }
 }
+
+// http://localhost:4000/api/burgers/{some-id}
